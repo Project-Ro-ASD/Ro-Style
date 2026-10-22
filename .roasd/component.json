@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "component": "ro-style",
+  "component_type": "component",
+  "component_class": "desktop-integration",
+  "package_names": [
+    "ro-style"
+  ],
+  "fedora_release": 44,
+  "architectures": [
+    "x86_64"
+  ],
+  "source_rpm": true,
+  "upstream_family": "KDE Plasma Breeze (derived widget style)"
+}

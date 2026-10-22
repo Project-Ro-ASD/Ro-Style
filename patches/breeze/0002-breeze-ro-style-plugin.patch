@@ -1,0 +1,129 @@
+diff --git a/kstyle/CMakeLists.txt b/kstyle/CMakeLists.txt
+index d5c8989..f91ddd2 100644
+--- a/kstyle/CMakeLists.txt
++++ b/kstyle/CMakeLists.txt
+@@ -58,39 +58,39 @@ kconfig_add_kcfg_files(breeze_PART_SRCS ../kdecoration/breezesettings.kcfgc)
+ kconfig_add_kcfg_files(breeze_PART_SRCS breezestyleconfigdata.kcfgc)
+ 
+ 
+-add_library(breeze${QT_MAJOR_VERSION} MODULE ${breeze_PART_SRCS})
++add_library(ro${QT_MAJOR_VERSION} MODULE ${breeze_PART_SRCS})
+ 
+-ecm_qt_declare_logging_category(breeze${QT_MAJOR_VERSION}
++ecm_qt_declare_logging_category(ro${QT_MAJOR_VERSION}
+     HEADER
+         breeze_logging.h
+     IDENTIFIER
+         BREEZE
+     CATEGORY_NAME
+-        breeze${QT_MAJOR_VERSION}
++        ro${QT_MAJOR_VERSION}
+     DEFAULT_SEVERITY
+         Warning
+ )
+ 
+-target_link_libraries(breeze${QT_MAJOR_VERSION}
++target_link_libraries(ro${QT_MAJOR_VERSION}
+     Qt${QT_MAJOR_VERSION}::Core
+     Qt${QT_MAJOR_VERSION}::Gui
+     Qt${QT_MAJOR_VERSION}::Widgets
+ )
+ 
+ if(HAVE_QTDBUS)
+-    target_link_libraries(breeze${QT_MAJOR_VERSION}
++    target_link_libraries(ro${QT_MAJOR_VERSION}
+         Qt${QT_MAJOR_VERSION}::DBus
+     )
+ endif()
+ 
+ if( BREEZE_HAVE_QTQUICK )
+-    target_link_libraries(breeze${QT_MAJOR_VERSION} 
++    target_link_libraries(ro${QT_MAJOR_VERSION} 
+         Qt${QT_MAJOR_VERSION}::Quick
+         KF${QT_MAJOR_VERSION}::CoreAddons
+     )
+ endif()
+ 
+-target_link_libraries(breeze${QT_MAJOR_VERSION}
++target_link_libraries(ro${QT_MAJOR_VERSION}
+     KF${QT_MAJOR_VERSION}::CoreAddons
+     KF${QT_MAJOR_VERSION}::ConfigCore
+     KF${QT_MAJOR_VERSION}::ConfigGui
+@@ -100,28 +100,28 @@ target_link_libraries(breeze${QT_MAJOR_VERSION}
+ )
+ 
+ if(QT_MAJOR_VERSION STREQUAL "5")
+-    target_link_libraries(breeze5 KF5::ConfigWidgets)
++    target_link_libraries(ro5 KF5::ConfigWidgets)
+ else()
+-    target_link_libraries(breeze6 KF6::ColorScheme)
++    target_link_libraries(ro6 KF6::ColorScheme)
+ endif()
+ 
+-target_link_libraries(breeze${QT_MAJOR_VERSION} breezecommon${QT_MAJOR_VERSION})
++target_link_libraries(ro${QT_MAJOR_VERSION} breezecommon${QT_MAJOR_VERSION})
+ 
+ if(KF${QT_MAJOR_VERSION}FrameworkIntegration_FOUND)
+-    target_link_libraries(breeze${QT_MAJOR_VERSION}  KF${QT_MAJOR_VERSION}::Style)
++    target_link_libraries(ro${QT_MAJOR_VERSION}  KF${QT_MAJOR_VERSION}::Style)
+ endif()
+ 
+ 
+ if (WIN32)
+     # As stated in https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants M_PI only gets defined
+     # when if _USE_MATH_DEFINES is defined
+-    target_compile_definitions(breeze${QT_MAJOR_VERSION}  PRIVATE _USE_MATH_DEFINES _BSD_SOURCE)
++    target_compile_definitions(ro${QT_MAJOR_VERSION}  PRIVATE _USE_MATH_DEFINES _BSD_SOURCE)
+ endif()
+ 
+ 
+ ########### install files ###############
+-install(TARGETS breeze${QT_MAJOR_VERSION}  DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/styles/)
+-install(FILES breeze.themerc  DESTINATION  ${KDE_INSTALL_DATADIR}/kstyle/themes)
++install(TARGETS ro${QT_MAJOR_VERSION}  DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/styles/)
++install(FILES ro.themerc  DESTINATION  ${KDE_INSTALL_DATADIR}/kstyle/themes)
+ 
+ ########### subdirectories ###############
+ 
+diff --git a/kstyle/breeze.json b/kstyle/breeze.json
+index a3d2b19..4d2ef30 100644
+--- a/kstyle/breeze.json
++++ b/kstyle/breeze.json
+@@ -1 +1 @@
+-{ "Keys": [ "Breeze" ] }
++{ "Keys": [ "Ro" ] }
+diff --git a/kstyle/breezestyleplugin.cpp b/kstyle/breezestyleplugin.cpp
+index 0b9cd7d..ac3558b 100644
+--- a/kstyle/breezestyleplugin.cpp
++++ b/kstyle/breezestyleplugin.cpp
+@@ -14,7 +14,7 @@ namespace Breeze
+ //_________________________________________________
+ QStyle *StylePlugin::create(const QString &key)
+ {
+-    if (key.compare(QLatin1String("breeze"), Qt::CaseInsensitive) == 0) {
++    if (key.compare(QLatin1String("ro"), Qt::CaseInsensitive) == 0) {
+         return new Style;
+     }
+     return nullptr;
+@@ -23,7 +23,7 @@ QStyle *StylePlugin::create(const QString &key)
+ //_________________________________________________
+ QStringList StylePlugin::keys() const
+ {
+-    return QStringList(QStringLiteral("Breeze"));
++    return QStringList(QStringLiteral("Ro"));
+ }
+ 
+ }
+diff --git a/kstyle/ro.themerc b/kstyle/ro.themerc
+new file mode 100644
+index 0000000..c0a9bde
+--- /dev/null
++++ b/kstyle/ro.themerc
+@@ -0,0 +1,7 @@
++[Misc]
++Name=Ro
++Comment=Ro-ASD widget style, derived from KDE Breeze
++ConfigPage=kstyle_config/breezestyleconfig
++
++[KDE]
++WidgetStyle=Ro

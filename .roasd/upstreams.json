@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "workspace": ".work/upstream",
+  "projects": {
+    "breeze": {
+      "url": "https://invent.kde.org/plasma/breeze.git",
+      "tarball": "https://download.kde.org/stable/plasma/6.7.5/breeze-6.7.5.tar.xz",
+      "base_tag": "v6.7.5",
+      "purpose": "Breeze Qt widget style (kstyle): menu, tooltip and frame drawing"
+    }
+  }
+}
