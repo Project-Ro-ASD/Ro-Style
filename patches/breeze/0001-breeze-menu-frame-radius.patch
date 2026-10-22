@@ -69,29 +69,20 @@ index 9ce055a..6c4a480 100644
      //* focus line
      void renderFocusLine(QPainter *, const QRectF &, const QColor &) const;
 diff --git a/kstyle/breezemetrics.h b/kstyle/breezemetrics.h
-index 8811816..bbfb76a 100644
+index 8811816..9d620b1 100644
 --- a/kstyle/breezemetrics.h
 +++ b/kstyle/breezemetrics.h
-@@ -40,6 +40,9 @@ struct Metrics {
+@@ -40,6 +40,10 @@ struct Metrics {
      // frames
      static constexpr int Frame_FrameWidth = 2;
      static constexpr int Frame_FrameRadius = 5;
-+    // Ro-ASD: menu and tooltip frame radius and the selected-item radius inside menus (Ro radius tokens)
++    // Ro-ASD: menu and tooltip frame radius, and the selected-item / menu button radius: frame radius minus
++    // the 4 px gap between the frame and the items (PM_MenuHMargin = MenuItem_HighlightGap), so they are concentric
 +    static constexpr int Menu_FrameRadius = 16;
-+    static constexpr int Menu_ItemRadius = 10;
++    static constexpr int Menu_ItemRadius = 12;
  
      // layout
      static constexpr int Layout_TopLevelMarginWidth = 10;
-@@ -50,7 +53,8 @@ struct Metrics {
-     static constexpr int LineEdit_FrameWidth = 6;
- 
-     // menu items
--    static constexpr int Menu_FrameWidth = 0;
-+    // Ro-ASD: inner padding so the item highlight stays inside the rounder corners
-+    static constexpr int Menu_FrameWidth = 6;
-     static constexpr int MenuItem_MarginWidth = 4;
-     static constexpr int MenuItem_HighlightGap = 4;
-     static constexpr int MenuItem_ExtraLeftMargin = 4;
 diff --git a/kstyle/breezeshadowhelper.cpp b/kstyle/breezeshadowhelper.cpp
 index 5307c08..3f35536 100644
 --- a/kstyle/breezeshadowhelper.cpp

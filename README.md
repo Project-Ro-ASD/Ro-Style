@@ -14,7 +14,7 @@ Depo Breeze kaynağını içermez; yalnızca Ro yamalarını tutar, paket derlen
 
 | Yama | Ne yapar |
 |---|---|
-| `0001-breeze-menu-frame-radius` | Menü ve araç ipucu çerçevesi, gölgesi ve bulanıklık bölgesi 16 px köşe; seçili satır ve menüdeki araç düğmeleri 10 px; menü iç boşluğu 6 px |
+| `0001-breeze-menu-frame-radius` | Menü ve araç ipucu çerçevesi, gölgesi ve bulanıklık bölgesi 16 px köşe; seçili satır ve menüdeki araç düğmeleri 12 px (16 − 4 px stok boşluk, eşmerkezli) |
 | `0002-breeze-ro-style-plugin` | Eklentiyi ayrı bir stil yapar: `ro6.so`, stil adı **Ro**, `ro.themerc` |
 
 Ayarlar Breeze ile aynı `breezerc`'den okunur: `MenuOpacity` (menü saydamlığı), gölge ve animasyon anahtarları Ro-Theme'in `/etc/xdg/breezerc`
