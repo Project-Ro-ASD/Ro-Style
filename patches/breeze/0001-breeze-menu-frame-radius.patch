@@ -1,0 +1,129 @@
+diff --git a/kstyle/breezehelper.cpp b/kstyle/breezehelper.cpp
+index 43c47ee..1300ffc 100644
+--- a/kstyle/breezehelper.cpp
++++ b/kstyle/breezehelper.cpp
+@@ -366,7 +366,7 @@ void Helper::renderDebugFrame(QPainter *painter, const QRectF &rect) const
+ }
+ 
+ //______________________________________________________________________________
+-void Helper::renderFocusRect(QPainter *painter, const QRectF &rect, const QBrush &brush, const QColor &outline, Sides sides) const
++void Helper::renderFocusRect(QPainter *painter, const QRectF &rect, const QBrush &brush, const QColor &outline, Sides sides, qreal radiusOverride) const
+ {
+     painter->save();
+     painter->setRenderHints(QPainter::Antialiasing);
+@@ -381,7 +381,7 @@ void Helper::renderFocusRect(QPainter *painter, const QRectF &rect, const QBrush
+ 
+         QRectF copy(strokedRect(rect));
+ 
+-        const qreal radius(frameRadius(PenWidth::Frame));
++        const qreal radius(radiusOverride >= 0 ? radiusOverride - 0.5 * PenWidth::Frame : frameRadius(PenWidth::Frame));
+         if (!(sides & SideTop)) {
+             copy.adjust(0, -radius, 0, 0);
+         }
+@@ -565,7 +565,7 @@ void Helper::renderMenuFrame(QPainter *painter, const QRectF &rect, const QColor
+         painter->setRenderHint(QPainter::Antialiasing);
+         QRectF frameRect(rect);
+ 
+-        qreal radius(Metrics::Frame_FrameRadius);
++        qreal radius(Metrics::Menu_FrameRadius);
+ 
+         frameRect.adjust( //
+             seamlessEdges.testFlag(Qt::LeftEdge) ? -radius : 0,
+@@ -623,7 +623,7 @@ QRegion Helper::menuFrameRegion(const QMenu *widget)
+     if (roundCorners) {
+         QRectF frameRect(widget->rect());
+ 
+-        qreal radius(Metrics::Frame_FrameRadius);
++        qreal radius(Metrics::Menu_FrameRadius);
+ 
+         frameRect.adjust( //
+             seamlessEdges.testFlag(Qt::LeftEdge) ? -radius : 0,
+@@ -661,6 +661,7 @@ void Helper::renderButtonFrame(QPainter *painter,
+     bool hasNeutralHighlight = stateProperties.value("hasNeutralHighlight");
+     bool isActiveWindow = stateProperties.value("isActiveWindow");
+     const bool roundButton = stateProperties.value("roundButton");
++    const bool menuButton = stateProperties.value("menuButton");
+ 
+     // don't render background if flat and not hovered, down, checked, or given visual focus
+     if (flat && !(hovered || down || checked || visualFocus) && bgAnimation == AnimationData::OpacityInvalid && penAnimation == AnimationData::OpacityInvalid) {
+@@ -735,7 +736,7 @@ void Helper::renderButtonFrame(QPainter *painter,
+     painter->setRenderHint(QPainter::Antialiasing, true);
+     painter->setBrush(bgBrush);
+     painter->setPen(QPen(penBrush, PenWidth::Frame));
+-    const qreal radius = roundButton ? roundRadius : frameRadius(PenWidth::Frame);
++    const qreal radius = roundButton ? roundRadius : (menuButton ? Metrics::Menu_ItemRadius - 0.5 * PenWidth::Frame : frameRadius(PenWidth::Frame));
+     painter->drawRoundedRect(frameRect, radius, radius);
+ }
+ 
+diff --git a/kstyle/breezehelper.h b/kstyle/breezehelper.h
+index 9ce055a..6c4a480 100644
+--- a/kstyle/breezehelper.h
++++ b/kstyle/breezehelper.h
+@@ -171,7 +171,7 @@ public:
+     void renderDebugFrame(QPainter *, const QRectF &) const;
+ 
+     //* focus rect
+-    void renderFocusRect(QPainter *, const QRectF &, const QBrush &, const QColor &outline = QColor(), Sides = {}) const;
++    void renderFocusRect(QPainter *, const QRectF &, const QBrush &, const QColor &outline = QColor(), Sides = {}, qreal radiusOverride = -1) const;
+ 
+     //* focus line
+     void renderFocusLine(QPainter *, const QRectF &, const QColor &) const;
+diff --git a/kstyle/breezemetrics.h b/kstyle/breezemetrics.h
+index 8811816..bbfb76a 100644
+--- a/kstyle/breezemetrics.h
++++ b/kstyle/breezemetrics.h
+@@ -40,6 +40,9 @@ struct Metrics {
+     // frames
+     static constexpr int Frame_FrameWidth = 2;
+     static constexpr int Frame_FrameRadius = 5;
++    // Ro-ASD: menu and tooltip frame radius and the selected-item radius inside menus (Ro radius tokens)
++    static constexpr int Menu_FrameRadius = 16;
++    static constexpr int Menu_ItemRadius = 10;
+ 
+     // layout
+     static constexpr int Layout_TopLevelMarginWidth = 10;
+@@ -50,7 +53,8 @@ struct Metrics {
+     static constexpr int LineEdit_FrameWidth = 6;
+ 
+     // menu items
+-    static constexpr int Menu_FrameWidth = 0;
++    // Ro-ASD: inner padding so the item highlight stays inside the rounder corners
++    static constexpr int Menu_FrameWidth = 6;
+     static constexpr int MenuItem_MarginWidth = 4;
+     static constexpr int MenuItem_HighlightGap = 4;
+     static constexpr int MenuItem_ExtraLeftMargin = 4;
+diff --git a/kstyle/breezeshadowhelper.cpp b/kstyle/breezeshadowhelper.cpp
+index 5307c08..3f35536 100644
+--- a/kstyle/breezeshadowhelper.cpp
++++ b/kstyle/breezeshadowhelper.cpp
+@@ -202,7 +202,7 @@ TileSet ShadowHelper::shadowTiles(QWidget *widget)
+     const QSize boxSize =
+         BoxShadowRenderer::calculateMinimumBoxSize(params.shadow1.radius).expandedTo(BoxShadowRenderer::calculateMinimumBoxSize(params.shadow2.radius));
+ 
+-    const qreal frameRadius = _helper->frameRadius();
++    const qreal frameRadius = Metrics::Menu_FrameRadius;
+ 
+     BoxShadowRenderer shadowRenderer;
+     shadowRenderer.setBorderRadius(frameRadius);
+diff --git a/kstyle/breezestyle.cpp b/kstyle/breezestyle.cpp
+index f0d4dfe..ce896c5 100644
+--- a/kstyle/breezestyle.cpp
++++ b/kstyle/breezestyle.cpp
+@@ -4608,6 +4608,8 @@ bool Style::drawPanelButtonToolPrimitive(const QStyleOption *option, QPainter *p
+     stateProperties["flat"] = flat;
+     stateProperties["hasNeutralHighlight"] = hasNeutralHighlight;
+     stateProperties["isActiveWindow"] = widget ? widget->isActiveWindow() : true;
++    // Ro-ASD: tool buttons inside menus (Dolphin quick row) share the selected-item radius
++    stateProperties["menuButton"] = widget && qobject_cast<const QMenu *>(widget->window());
+ 
+     _helper->renderButtonFrame(painter, baseRect, option->palette, stateProperties, bgAnimation, penAnimation);
+     if (painter->hasClipping()) {
+@@ -6046,7 +6048,7 @@ bool Style::drawMenuItemControl(const QStyleOption *option, QPainter *painter, c
+             }
+         }
+ 
+-        _helper->renderFocusRect(painter, rect, color, outlineColor, SideTop | SideBottom | SideLeft | SideRight);
++        _helper->renderFocusRect(painter, rect, color, outlineColor, SideTop | SideBottom | SideLeft | SideRight, Metrics::Menu_ItemRadius);
+     }
+ 
+     // get rect available for contents
