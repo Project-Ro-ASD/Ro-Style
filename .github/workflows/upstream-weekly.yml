@@ -1,0 +1,120 @@
+name: Upstream weekly
+
+# Weekly look at Fedora's plasma-breeze: when it is newer than the pinned breeze_version in
+# packaging/fedora/ro-style.spec, try the Ro patches on the new Breeze archive and open an issue with the result.
+# The pinned version is never changed automatically (patches are written against one Breeze version and the
+# archive checksum is pinned); the issue tells a maintainer what to rebase.
+
+"on":
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-weekly
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Compare with Fedora and try the patches
+    runs-on: ubuntu-24.04
+    container:
+      image: fedora:44
+    outputs:
+      pinned: ${{ steps.cmp.outputs.pinned }}
+      newer: ${{ steps.cmp.outputs.newer }}
+      applies: ${{ steps.cmp.outputs.applies }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install tools
+        run: dnf install -y git python3 curl tar xz dnf5-plugins
+
+      - name: Compare versions and try the patches
+        id: cmp
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          PINNED="$(awk '/^%global breeze_version/ { print $3; exit }' packaging/fedora/ro-style.spec)"
+          FEDORA="$(dnf -q repoquery --latest-limit=1 --queryformat '%{version}\n' plasma-breeze | tail -n1)"
+          [[ -n "${FEDORA}" ]]
+          echo "pinned=${PINNED}" >> "${GITHUB_OUTPUT}"
+          echo "Pinned Breeze: ${PINNED}; Fedora plasma-breeze: ${FEDORA}" | tee -a "${GITHUB_STEP_SUMMARY}"
+
+          if [[ "$(printf '%s\n%s\n' "${PINNED}" "${FEDORA}" | sort -V | tail -n1)" == "${PINNED}" ]]; then
+            echo "Fedora is not newer than the pinned version; nothing to do." | tee -a "${GITHUB_STEP_SUMMARY}"
+            echo "newer=" >> "${GITHUB_OUTPUT}"
+            echo "applies=" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          echo "newer=${FEDORA}" >> "${GITHUB_OUTPUT}"
+
+          WORK="$(mktemp -d)"
+          curl -fsSL -o "${WORK}/breeze.tar.xz" "https://download.kde.org/stable/plasma/${FEDORA}/breeze-${FEDORA}.tar.xz"
+          tar -xf "${WORK}/breeze.tar.xz" -C "${WORK}"
+          cd "${WORK}/breeze-${FEDORA}" && git init -q
+          OK=true
+          for p in "${GITHUB_WORKSPACE}"/patches/breeze/*.patch; do
+            if git apply --check "$p" 2>>"${WORK}/err.txt" && git apply "$p"; then
+              echo "applies: $(basename "$p")" | tee -a "${GITHUB_STEP_SUMMARY}"
+            else
+              echo "DOES NOT APPLY: $(basename "$p")" | tee -a "${GITHUB_STEP_SUMMARY}"
+              OK=false
+              break
+            fi
+          done
+          echo "applies=${OK}" >> "${GITHUB_OUTPUT}"
+          cp "${WORK}/err.txt" "${GITHUB_WORKSPACE}/patch-errors.txt" 2>/dev/null || true
+
+      - name: Keep the patch errors
+        if: steps.cmp.outputs.applies == 'false'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: patch-errors
+          path: patch-errors.txt
+          retention-days: 14
+
+  report:
+    name: Open an issue when Fedora is newer
+    needs: check
+    if: needs.check.outputs.newer != ''
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PINNED: ${{ needs.check.outputs.pinned }}
+      NEWER: ${{ needs.check.outputs.newer }}
+      APPLIES: ${{ needs.check.outputs.applies }}
+    steps:
+      - name: Open the issue once per Breeze version
+        shell: bash
+        run: |
+          set -euo pipefail
+          TITLE="Fedora has Breeze ${NEWER}: rebase the Ro patches (pinned ${PINNED})"
+          EXISTING="$(gh issue list --repo "${GITHUB_REPOSITORY}" --state open --search "\"Fedora has Breeze ${NEWER}\" in:title" --json number --jq '.[0].number // empty')"
+          if [[ -n "${EXISTING}" ]]; then
+            echo "Issue #${EXISTING} is already open for ${NEWER}."
+            exit 0
+          fi
+          if [[ "${APPLIES}" == "true" ]]; then
+            STATE="The Ro patches apply to Breeze ${NEWER} without changes."
+            TODO="Bump \`breeze_version\` in packaging/fedora/ro-style.spec, \`base_tag\`, \`tarball\` and \`tarball_sha256\` in .roasd/upstreams.json, add a changelog entry, run tests/check-spec.sh and a container build, check the style in Dolphin, then release."
+          else
+            STATE="At least one Ro patch does **not** apply to Breeze ${NEWER} (see the artifact \`patch-errors\` of the workflow run)."
+            TODO="Refresh the failing patch against Breeze ${NEWER} (look at renderMenuFrame, menuFrameRegion, the shadow tiles and renderFocusRect in kstyle), update its provenance note, then bump the version as described in packaging/fedora/README.md."
+          fi
+          BODY="Fedora's \`plasma-breeze\` is ${NEWER}; this repository is pinned to Breeze ${PINNED}.
+
+          ${STATE}
+
+          ${TODO}
+
+          Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          gh issue create --repo "${GITHUB_REPOSITORY}" --title "${TITLE}" --body "${BODY}" --label enhancement

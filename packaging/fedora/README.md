@@ -9,3 +9,11 @@ It does not replace any Fedora package, so no Ro-Repo `allow_fedora_override` en
 modelled on Ro-KDE-Dolphin `.github/workflows/release.yml`, to be added with the package.
 
 Build check used so far (Fedora 44 container): configure with `-DBUILD_QT5=OFF -DBUILD_TESTING=OFF`, `make ro6`.
+
+## Rebase onto a new Fedora Plasma
+
+`.github/workflows/upstream-weekly.yml` runs every Monday (and on demand): when Fedora's `plasma-breeze` is newer than the pinned `breeze_version`
+it tries the patches on the new Breeze archive and opens an issue (once per version) saying whether they apply. The pinned version is never changed
+automatically. To rebase: refresh the failing patch (if any), then change `breeze_version` in the spec and `base_tag`, `tarball` and `tarball_sha256`
+in `.roasd/upstreams.json`, add a spec changelog entry, run `tests/check-spec.sh`, build in a Fedora 44 container, check the style in Dolphin, bump VERSION and release.
+
