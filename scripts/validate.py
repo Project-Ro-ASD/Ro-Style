@@ -10,7 +10,7 @@ COMPONENT = "ro-style"
 errors = []
 
 for rel in ["README.md", "VERSION", "AGENTS.md", "LICENSE", ".roasd/component.json", ".roasd/upstreams.json",
-            "docs/ARCHITECTURE.md", "docs/PATCH-PROVENANCE-TEMPLATE.md"]:
+            "docs/ARCHITECTURE.md", "docs/PATCH-PROVENANCE-TEMPLATE.md", "packaging/fedora/ro-style.spec", "tests/check-spec.sh"]:
     if not (ROOT / rel).exists():
         errors.append(f"missing required file: {rel}")
 
