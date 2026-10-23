@@ -1,0 +1,14 @@
+diff --git a/kstyle/breezemetrics.h b/kstyle/breezemetrics.h
+index 795f79c..75ebcb5 100644
+--- a/kstyle/breezemetrics.h
++++ b/kstyle/breezemetrics.h
+@@ -77,7 +77,8 @@ struct Metrics {
+ 
+     // buttons
+     static constexpr int Button_MinWidth = 80;
+-    static constexpr int Button_MarginWidth = 6;
++    // Ro-ASD: 8 (token sm), a little more room inside buttons; upstream 6
++    static constexpr int Button_MarginWidth = 8;
+     static constexpr int Button_ItemSpacing = 4;
+ 
+     // tool buttons

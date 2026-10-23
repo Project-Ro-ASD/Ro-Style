@@ -13,6 +13,8 @@ Source0:        https://download.kde.org/stable/plasma/%{breeze_version}/breeze-
 # Ro patches, in order (tests/check-spec.sh checks that every patches/breeze/*.patch is listed)
 Patch0:         0001-breeze-menu-frame-radius.patch
 Patch1:         0002-breeze-ro-style-plugin.patch
+Patch2:         0003-breeze-ro-corner-radius.patch
+Patch3:         0004-breeze-ro-button-padding.patch
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

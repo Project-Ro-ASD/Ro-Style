@@ -1,0 +1,24 @@
+diff --git a/kstyle/breezemetrics.h b/kstyle/breezemetrics.h
+index 9d620b1..795f79c 100644
+--- a/kstyle/breezemetrics.h
++++ b/kstyle/breezemetrics.h
+@@ -39,7 +39,8 @@ struct Metrics {
+ 
+     // frames
+     static constexpr int Frame_FrameWidth = 2;
+-    static constexpr int Frame_FrameRadius = 5;
++    // Ro-ASD: 12 (Ro radius token md, same as buttons and fields in the Plasma style); upstream 5
++    static constexpr int Frame_FrameRadius = 12;
+     // Ro-ASD: menu and tooltip frame radius, and the selected-item / menu button radius: frame radius minus
+     // the 4 px gap between the frame and the items (PM_MenuHMargin = MenuItem_HighlightGap), so they are concentric
+     static constexpr int Menu_FrameRadius = 16;
+@@ -91,7 +92,8 @@ struct Metrics {
+     static constexpr int CheckBox_Size = 20;
+     static constexpr int CheckBox_FocusMarginWidth = 2;
+     static constexpr int CheckBox_ItemSpacing = 4;
+-    static constexpr int CheckBox_Radius = Frame_FrameRadius - 1;
++    // Ro-ASD: 4 (token xs); upstream Frame_FrameRadius - 1 would make a 20 px box nearly round at 12
++    static constexpr int CheckBox_Radius = 4;
+ 
+     // menubar items
+     static constexpr int MenuBarItem_MarginWidth = 10;

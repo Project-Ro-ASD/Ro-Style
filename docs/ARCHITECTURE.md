@@ -11,6 +11,7 @@ Ro-Style keeps the few Ro-ASD differences that the Breeze Qt style cannot expres
 | Colours (menu, hover, text) | Ro-Theme | colour schemes RoLight / RoDark |
 | Menu translucency | Ro-Theme | `MenuOpacity` in the system `breezerc` (Breeze setting) |
 | Corner radius (16 px frame, 12 px selected item and menu buttons, concentric with the stock 4 px gap), shadow and blur region radius | **this repository** | patch 0001 |
+| Control corner radius (12 px) and button inner padding (8) | **this repository** | patches 0003, 0004 |
 | Menu structure, quick button row | Ro-KDE-Dolphin | Dolphin patch 0012 |
 | Menu icons | Ro-Theme | `ro-icons` |
 
