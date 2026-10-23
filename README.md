@@ -18,6 +18,10 @@ Depo Breeze kaynağını içermez; yalnızca Ro yamalarını tutar, paket derlen
 | `0002-breeze-ro-style-plugin` | Eklentiyi ayrı bir stil yapar: `ro6.so`, stil adı **Ro**, `ro.themerc` |
 | `0003-breeze-ro-corner-radius` | Düğme, giriş alanı, açılır kutu, sekme, çerçeve ve liste seçimi köşesi 12 px (Breeze 5); onay kutusu köşesi 4 |
 | `0004-breeze-ro-button-padding` | Düğme iç boşluğu 8 (Breeze 6) |
+| `0005-breeze-ro-accent-scrollbar` | Kaydırma çubuğu tutamağı durgunken de vurgu renginde |
+| `0006-breeze-ro-pill-tabs` | Etkin sekme nötr hap, diğer sekmeler zeminsiz |
+| `0007-breeze-ro-flat-buttons` | Durgun düğmede kenarlık ve gölge yok |
+| `0008-breeze-ro-list-selection-radius` | Liste ve ağaç seçim köşesi 8 |
 
 Ayarlar Breeze ile aynı `breezerc`'den okunur: `MenuOpacity` (menü saydamlığı), gölge ve animasyon anahtarları Ro-Theme'in `/etc/xdg/breezerc`
 varsayılanlarından gelir; Sistem Ayarları'ndaki Breeze "Yapılandır" sayfası Ro stilinde de açılır.

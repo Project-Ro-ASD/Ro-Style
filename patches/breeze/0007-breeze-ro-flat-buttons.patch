@@ -1,0 +1,25 @@
+diff --git a/kstyle/breezehelper.cpp b/kstyle/breezehelper.cpp
+index 4825780..938950a 100644
+--- a/kstyle/breezehelper.cpp
++++ b/kstyle/breezehelper.cpp
+@@ -704,8 +704,8 @@ void Helper::renderButtonFrame(QPainter *painter,
+             penBrush = KColorUtils::mix(highlightColor, KColorUtils::mix(palette.button().color(), palette.buttonText().color(), frameIntensityBias()), 0.5);
+         } else {
+             bgBrush = palette.button().color();
+-            penBrush =
+-                hasNeutralHighlight ? neutralText(palette) : KColorUtils::mix(palette.button().color(), palette.buttonText().color(), frameIntensityBias());
++            // Ro-ASD: no outline on an idle button (Plasma style PST-23, filled); hover and focus still draw the accent outline
++            penBrush = hasNeutralHighlight ? neutralText(palette) : palette.button().color();
+         }
+     }
+ 
+@@ -728,7 +728,8 @@ void Helper::renderButtonFrame(QPainter *painter,
+ 
+     const qreal roundRadius = std::max(rect.width(), rect.height()) / 2;
+     // Shadow
+-    if (isActiveWindow && !(flat || down || checked) && enabled) {
++    // Ro-ASD: no drop shadow under buttons (flat, filled surface); upstream draws one for idle buttons in the active window
++    if (false && isActiveWindow && !(flat || down || checked) && enabled) {
+         const qreal shadowRadius = roundButton ? roundRadius : Metrics::Frame_FrameRadius - PenWidth::Shadow / 2;
+         renderRoundedRectShadow(painter, shadowedRect, shadowColor(palette), shadowRadius);
+     }

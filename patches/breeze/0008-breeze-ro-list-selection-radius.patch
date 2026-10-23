@@ -1,0 +1,14 @@
+diff --git a/kstyle/breezehelper.cpp b/kstyle/breezehelper.cpp
+index 938950a..ed677aa 100644
+--- a/kstyle/breezehelper.cpp
++++ b/kstyle/breezehelper.cpp
+@@ -1697,7 +1697,8 @@ void Helper::renderViewItemPosition(QPainter *painter,
+         sides = SideTop | SideBottom | SideLeft | SideRight;
+         break;
+     }
+-    renderFocusRect(painter, rect, bg, outline, sides);
++    // Ro-ASD: list and tree selections use the sm radius 8 (Plasma style PST-26) instead of the 12 px control radius
++    renderFocusRect(painter, rect, bg, outline, sides, 8);
+     painter->restore();
+ }
+ 

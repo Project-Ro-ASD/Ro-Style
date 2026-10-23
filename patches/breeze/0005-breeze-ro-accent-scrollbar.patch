@@ -1,0 +1,14 @@
+diff --git a/kstyle/breezehelper.cpp b/kstyle/breezehelper.cpp
+index 1300ffc..63991f4 100644
+--- a/kstyle/breezehelper.cpp
++++ b/kstyle/breezehelper.cpp
+@@ -276,7 +276,8 @@ QColor Helper::sliderOutlineColor(const QPalette &palette, bool mouseOver, bool
+ //____________________________________________________________________
+ QColor Helper::scrollBarHandleColor(const QPalette &palette, bool mouseOver, bool hasFocus, qreal opacity, AnimationMode mode) const
+ {
+-    QColor color(alphaColor(palette.color(QPalette::WindowText), 0.5));
++    // Ro-ASD: the idle handle uses the accent colour (Plasma style PST-19); upstream: 50 % of the window text
++    QColor color(alphaColor(palette.color(QPalette::Highlight), 0.75));
+ 
+     // hover takes precedence over focus
+     if (mode == AnimationHover) {
