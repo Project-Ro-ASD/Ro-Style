@@ -1,0 +1,34 @@
+diff --git a/kstyle/breezestyle.cpp b/kstyle/breezestyle.cpp
+index efc873e..9fab81a 100644
+--- a/kstyle/breezestyle.cpp
++++ b/kstyle/breezestyle.cpp
+@@ -6829,7 +6829,8 @@ bool Style::drawHeaderSectionControl(const QStyleOption *option, QPainter *paint
+     const qreal opacity(_animations->headerViewEngine().opacity(widget, rect.topLeft()));
+ 
+     // fill
+-    const auto &normal = palette.color(QPalette::Button);
++    // Ro-ASD: the header section sits on the list base colour; upstream: the palette button colour
++    const auto &normal = palette.color(QPalette::Base);
+     const auto focus(KColorUtils::mix(normal, _helper->focusColor(palette), 0.2));
+     const auto hover(KColorUtils::mix(normal, _helper->hoverColor(palette), 0.2));
+ 
+@@ -6877,7 +6878,8 @@ bool Style::drawHeaderSectionControl(const QStyleOption *option, QPainter *paint
+     // If the separator is next to a "HeaderEmptyArea", skip it and let that draw
+     // the separator instead. This means that those separators are only visible when necessary.
+ 
+     if (horizontal) {
+-        if (headerOption->position != QStyleOptionHeader::OnlyOneSection) {
++        // Ro-ASD: no vertical separators between horizontal header sections; upstream draws one at each section edge
++        if (false && headerOption->position != QStyleOptionHeader::OnlyOneSection) {
+             if (reverseLayout && headerOption->position != QStyleOptionHeader::Beginning) {
+                 painter->drawLine(rect.topLeft(), rect.bottomLeft() - QPoint(0, 1));
+@@ -6909,7 +6911,8 @@ bool Style::drawHeaderEmptyAreaControl(const QStyleOption *option, QPainter *pai
+ 
+     // fill
+     painter->setRenderHint(QPainter::Antialiasing, false);
+-    painter->setBrush(palette.color(QPalette::Button));
++    // Ro-ASD: the empty header area sits on the list base colour too; upstream: the palette button colour
++    painter->setBrush(palette.color(QPalette::Base));
+     painter->setPen(Qt::NoPen);
+     painter->drawRect(rect);
+ 

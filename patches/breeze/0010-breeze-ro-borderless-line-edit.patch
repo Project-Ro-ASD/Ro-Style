@@ -1,0 +1,19 @@
+diff --git a/kstyle/breezestyle.cpp b/kstyle/breezestyle.cpp
+index ae89e05..3b00125 100644
+--- a/kstyle/breezestyle.cpp
++++ b/kstyle/breezestyle.cpp
+@@ -4075,8 +4075,12 @@ bool Style::drawFrameLineEditPrimitive(const QStyleOption *option, QPainter *pai
+ 
+         // render
+         const auto &background = palette.color(QPalette::Base);
+-        const auto outline(hasHighlightNeutral(widget, option, mouseOver, hasFocus) ? _helper->neutralText(palette).lighter(mouseOver || hasFocus ? 150 : 100)
+-                                                                                    : _helper->frameOutlineColor(palette, mouseOver, hasFocus, opacity, mode));
++        auto outline(hasHighlightNeutral(widget, option, mouseOver, hasFocus) ? _helper->neutralText(palette).lighter(mouseOver || hasFocus ? 150 : 100)
++                                                                              : _helper->frameOutlineColor(palette, mouseOver, hasFocus, opacity, mode));
++        // Ro-ASD: the idle line edit is borderless (the outline falls back to the field colour); upstream: a frame outline also on the idle field
++        if (!(mouseOver || hasFocus) && mode == AnimationNone) {
++            outline = background;
++        }
+         _helper->renderFrame(painter, rect, background, outline);
+     }
+ 

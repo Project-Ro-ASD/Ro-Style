@@ -22,6 +22,10 @@ Depo Breeze kaynağını içermez; yalnızca Ro yamalarını tutar, paket derlen
 | `0006-breeze-ro-pill-tabs` | Etkin sekme nötr hap, diğer sekmeler zeminsiz |
 | `0007-breeze-ro-flat-buttons` | Durgun düğmede kenarlık ve gölge yok |
 | `0008-breeze-ro-list-selection-radius` | Liste ve ağaç seçim köşesi 8 |
+| `0009-breeze-ro-accent-slider-handle` | Sürgü tutamağı vurgu renginde ve gölgesiz; kenar yalnız üzerine gelince veya odakta |
+| `0010-breeze-ro-borderless-line-edit` | Giriş alanı durgunken kenarlıksız |
+| `0011-breeze-ro-flat-group-box` | Grup kutusu çerçevesiz, kalın başlığı solda |
+| `0012-breeze-ro-plain-header` | Tablo başlığı liste zemininde, dikey ayraçsız |
 
 Ayarlar Breeze ile aynı `breezerc`'den okunur: `MenuOpacity` (menü saydamlığı), gölge ve animasyon anahtarları Ro-Theme'in `/etc/xdg/breezerc`
 varsayılanlarından gelir; Sistem Ayarları'ndaki Breeze "Yapılandır" sayfası Ro stilinde de açılır.

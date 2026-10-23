@@ -1,0 +1,34 @@
+diff --git a/kstyle/breezestyle.cpp b/kstyle/breezestyle.cpp
+index ce896c5..ae89e05 100644
+--- a/kstyle/breezestyle.cpp
++++ b/kstyle/breezestyle.cpp
+@@ -8121,7 +8121,8 @@ bool Style::drawSliderComplexControl(const QStyleOptionComplex *option, QPainter
+         const qreal opacity(_animations->widgetStateEngine().buttonOpacity(widget));
+ 
+         // define colors
+-        const auto &background = palette.color(QPalette::Button);
++        // Ro-ASD: the slider handle is filled with the accent colour; upstream: the palette button colour
++        const auto &background = palette.color(QPalette::Highlight);
+         auto outline(_helper->sliderOutlineColor(palette, handleActive && mouseOver, hasFocus, opacity, mode));
+         if (hasFocus || (handleActive && mouseOver)) {
+             outline = hasHighlightNeutral(widget, option, handleActive && mouseOver, hasFocus)
+@@ -8131,7 +8132,8 @@ bool Style::drawSliderComplexControl(const QStyleOptionComplex *option, QPainter
+         const auto shadow(_helper->shadowColor(palette));
+ 
+         // render
+-        _helper->renderSliderHandle(painter, handleRect, background, outline, shadow, sunken);
++        // Ro-ASD: no drop shadow on the handle, outline only on hover or focus; upstream: shadow and outline always
++        _helper->renderSliderHandle(painter, handleRect, background, (hasFocus || (handleActive && mouseOver)) ? outline : QColor(), shadow, true);
+     }
+ 
+     return true;
+@@ -8205,7 +8207,8 @@ bool Style::drawDialComplexControl(const QStyleOptionComplex *option, QPainter *
+         const auto shadow(_helper->shadowColor(palette));
+ 
+         // render
+-        _helper->renderSliderHandle(painter, handleRect, background, outline, shadow, sunken);
++        // Ro-ASD: the dial handle keeps its fill but follows the slider handle here; upstream: shadow and outline always
++        _helper->renderSliderHandle(painter, handleRect, background, (hasFocus || (handleActive && mouseOver)) ? outline : QColor(), shadow, true);
+     }
+ 
+     return true;
