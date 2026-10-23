@@ -101,7 +101,9 @@ jobs:
           cp packaging/fedora/ro-style.spec "$TOPDIR/SPECS/ro-style.spec"
           cp patches/breeze/*.patch "$TOPDIR/SOURCES/"
 
-          SOURCE0="$(basename "$(awk '/^Source0:/ { print $2; exit }' packaging/fedora/ro-style.spec)")"
+          # Source0 is breeze-%{breeze_version}.tar.xz: expand the one macro it uses instead of reading the raw spec line
+          BREEZE_VERSION="$(awk '/^%global breeze_version/ { print $3; exit }' packaging/fedora/ro-style.spec)"
+          SOURCE0="breeze-${BREEZE_VERSION}.tar.xz"
           SHA="$(python3 -c 'import json; print(json.load(open(".roasd/upstreams.json"))["projects"]["breeze"]["tarball_sha256"])')"
           spectool -g -C "$TOPDIR/SOURCES" -S "$TOPDIR/SPECS/ro-style.spec"
           echo "${SHA}  $TOPDIR/SOURCES/${SOURCE0}" | sha256sum -c -
