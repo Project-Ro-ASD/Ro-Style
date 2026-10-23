@@ -1,0 +1,81 @@
+diff --git a/kstyle/breezehelper.cpp b/kstyle/breezehelper.cpp
+index 63991f4..4825780 100644
+--- a/kstyle/breezehelper.cpp
++++ b/kstyle/breezehelper.cpp
+@@ -1455,57 +1455,26 @@ void Helper::renderTabBarTab(QPainter *painter,
+     QRectF frameRect = rect;
+     QColor bgBrush;
+ 
++    // Ro-ASD: pill shaped tabs (Plasma style PST-25): the selected tab is a neutral pill inset by 3 px, the other
++    // tabs have no background and a faint pill on hover. Upstream draws a framed tab with an accent line.
++    Q_UNUSED(corners)
++    Q_UNUSED(documentMode)
++    Q_UNUSED(north)
++    Q_UNUSED(south)
++    Q_UNUSED(west)
++    Q_UNUSED(east)
++    Q_UNUSED(isQtQuickControl)
++    Q_UNUSED(hasAlteredBackground)
++    Q_UNUSED(bgBrush)
++    const QRectF pill = frameRect.adjusted(3, 3, -3, -3);
++    const qreal pillRadius = std::min(pill.height(), pill.width()) / 2;
++    painter->setPen(Qt::NoPen);
+     if (selected) {
+-        // overlap border
+-        // This covers just enough of the border, so that both the border and its
+-        // antialiasing effect is covered. On 100% scale it does nothing
+-        const qreal overlap = devicePixelRatio(painter) * devicePixelRatio(painter);
+-        frameRect.adjust(east ? -overlap : 0, south ? -overlap : 0, west ? overlap : 0, north ? overlap : 0);
+-
+-        if (documentMode && !isQtQuickControl && !hasAlteredBackground) {
+-            bgBrush = palette.color(QPalette::Window);
+-        } else {
+-            bgBrush = frameBackgroundColor(palette);
+-        }
+-        QColor penBrush = KColorUtils::mix(bgBrush, palette.color(QPalette::WindowText), frameIntensityBias());
+-        painter->setBrush(bgBrush);
+-        painter->setPen(QPen(penBrush, PenWidth::Frame));
+-        QRectF highlightRect = frameRect;
+-        if (north || south) {
+-            highlightRect.setHeight(Metrics::TabBar_ActiveEffectSize);
+-        } else if (west || east) {
+-            highlightRect.setWidth(Metrics::TabBar_ActiveEffectSize);
+-        }
+-        if (south) {
+-            highlightRect.moveBottom(frameRect.bottom());
+-        } else if (east) {
+-            highlightRect.moveRight(frameRect.right());
+-        }
+-        QPainterPath path = roundedPath(strokedRect(frameRect), corners, frameRadius(PenWidth::Frame));
+-        painter->drawPath(path);
+-        QPainterPath highlightPath = roundedPath(highlightRect, corners, Metrics::Frame_FrameRadius);
+-        painter->setBrush(palette.color(QPalette::Highlight));
+-        painter->setPen(Qt::NoPen);
+-        painter->drawPath(highlightPath);
+-    } else {
+-        // don't overlap border
+-        // Since we don't set the rectangle as strokedRect here, modify only one side of it
+-        // the same amount strokedRect method would, to make it snap next to the border
+-        const qreal overlap = PenWidth::Frame;
+-        frameRect.adjust(east ? overlap : 0, south ? overlap : 0, west ? -overlap : 0, north ? -overlap : 0);
+-
+-        const auto windowColor = palette.color(QPalette::Window);
+-        bgBrush = windowColor.darker(120);
+-        const auto hover = alphaColor(hoverColor(palette), 0.2);
+-        if (animated) {
+-            bgBrush = KColorUtils::mix(bgBrush, hover, animation);
+-        } else if (enabled && hovered && !selected) {
+-            bgBrush = hover;
+-        }
+-        painter->setBrush(bgBrush);
+-        painter->setPen(Qt::NoPen);
+-        QPainterPath path = roundedPath(frameRect, corners, Metrics::Frame_FrameRadius);
+-        painter->drawPath(path);
++        painter->setBrush(KColorUtils::mix(palette.color(QPalette::Window), palette.color(QPalette::WindowText), 0.15));
++        painter->drawRoundedRect(pill, pillRadius, pillRadius);
++    } else if (animated || (enabled && hovered)) {
++        painter->setBrush(alphaColor(hoverColor(palette), animated ? 0.2 * animation : 0.2));
++        painter->drawRoundedRect(pill, pillRadius, pillRadius);
+     }
+ }
+ 
