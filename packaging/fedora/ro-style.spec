@@ -19,6 +19,10 @@ Patch4:         0005-breeze-ro-accent-scrollbar.patch
 Patch5:         0006-breeze-ro-pill-tabs.patch
 Patch6:         0007-breeze-ro-flat-buttons.patch
 Patch7:         0008-breeze-ro-list-selection-radius.patch
+Patch8:         0009-breeze-ro-accent-slider-handle.patch
+Patch9:         0010-breeze-ro-borderless-line-edit.patch
+Patch10:        0011-breeze-ro-flat-group-box.patch
+Patch11:        0012-breeze-ro-plain-header.patch
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

@@ -1,0 +1,48 @@
+diff --git a/kstyle/breezestyle.cpp b/kstyle/breezestyle.cpp
+index 3b00125..efc873e 100644
+--- a/kstyle/breezestyle.cpp
++++ b/kstyle/breezestyle.cpp
+@@ -2857,7 +2857,8 @@ QRect Style::groupBoxSubControlRect(const QStyleOptionComplex *option, SubContro
+         const bool checkable(groupBoxOption->subControls & QStyle::SC_GroupBoxCheckBox);
+ 
+         QFont font = widget ? widget->font() : qApp->font("QGroupBox");
+-        if (groupBoxOption->features == QStyleOptionFrame::Flat && !(groupBoxOption->subControls & SC_GroupBoxCheckBox)
++        // Ro-ASD: the title is bold and one point larger on every group box without a check box; upstream: only on a flat group box
++        if (!(groupBoxOption->subControls & SC_GroupBoxCheckBox)
+             && font.isCopyOf(qApp->font("QGroupBox"))) {
+             font.setPointSize(font.pointSize() + 1);
+             font.setBold(true);
+@@ -2885,8 +2886,8 @@ QRect Style::groupBoxSubControlRect(const QStyleOptionComplex *option, SubContro
+         titleRect.setHeight(titleHeight);
+         titleRect.translate(0, Metrics::GroupBox_TitleMarginWidth);
+ 
+-        // center
+-        titleRect = centerRect(titleRect, titleWidth, titleHeight);
++        // Ro-ASD: the title is left aligned; upstream: centred in the group box
++        titleRect = QRect(titleRect.left(), titleRect.top(), titleWidth, titleHeight);
+ 
+         if (subControl == SC_GroupBoxCheckBox) {
+             // vertical centering
+@@ -4203,10 +4204,8 @@ bool Style::drawFrameGroupBoxPrimitive(const QStyleOption *option, QPainter *pai
+         return true;
+     }
+ 
+-    // no frame for flat groupboxes
+-    if (frameOption->features & QStyleOptionFrame::Flat) {
+-        return true;
+-    }
++    // Ro-ASD: no frame around a group box; upstream draws one unless the group box is flat
++    return true;
+ 
+     // normal frame
+     const auto &palette(option->palette);
+@@ -7604,7 +7603,8 @@ bool Style::drawGroupBoxComplexControl(const QStyleOptionComplex *option, QPaint
+ 
+     // Text for label
+     QFont font = widget ? widget->font() : qApp->font("QGroupBox");
+-    if (groupBoxOption->features == QStyleOptionFrame::Flat && !(groupBoxOption->subControls & SC_GroupBoxCheckBox)) {
++    // Ro-ASD: the label is bold and one point larger on every group box without a check box; upstream: only on a flat group box
++    if (!(groupBoxOption->subControls & SC_GroupBoxCheckBox)) {
+         font.setPointSize(font.pointSize() + 1);
+         font.setBold(true);
+     }
