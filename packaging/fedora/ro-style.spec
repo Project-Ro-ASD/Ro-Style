@@ -3,7 +3,7 @@
 %global breeze_version 6.7.5
 
 Name:           ro-style
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Ro-ASD Qt widget style, derived from KDE Breeze
 # kstyle and libbreezecommon: GPL-2.0-or-later (some files MIT or GPL-2.0-or-later OR MIT; generated Qt files)
@@ -72,6 +72,12 @@ install -Dm0644 kstyle/ro.themerc %{buildroot}%{_datadir}/kstyle/themes/ro.theme
 %{_datadir}/kstyle/themes/ro.themerc
 
 %changelog
+* Fri Oct 23 2026 Project Ro-ASD <contact@roasd.org> - 0.1.1-1
+- Controls use a 12 px corner (buttons, fields, combo boxes, tabs, frames, list
+  selection; Breeze 5) and the check box corner stays 4 (patch 0003). The menu
+  and tooltip frame keep 16 px / 12 px.
+- Button inner padding 8 (Breeze 6) (patch 0004).
+
 * Thu Oct 22 2026 Project Ro-ASD <contact@roasd.org> - 0.1.0-1
 - First package: the Ro style (plugin ro6, style name Ro) from Breeze 6.7.5 with the menu frame (16 px) and
   plugin-name patches.
