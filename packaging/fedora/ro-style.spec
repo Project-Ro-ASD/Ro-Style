@@ -3,7 +3,7 @@
 %global breeze_version 6.7.5
 
 Name:           ro-style
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        Ro-ASD Qt widget style, derived from KDE Breeze
 # kstyle and libbreezecommon: GPL-2.0-or-later (some files MIT or GPL-2.0-or-later OR MIT; generated Qt files)
@@ -80,6 +80,25 @@ install -Dm0644 kstyle/ro.themerc %{buildroot}%{_datadir}/kstyle/themes/ro.theme
 %{_datadir}/kstyle/themes/ro.themerc
 
 %changelog
+* Fri Oct 23 2026 Project Ro-ASD <contact@roasd.org> - 0.1.2-1
+- Scroll bar: the idle handle uses the accent colour (75 %), like the Plasma style; upstream uses 50 % of
+  the window text and accents only on hover or focus (patch 0005).
+- Tabs: the selected tab is a neutral pill (window colour mixed with 15 % text) inset by 3 px, the other
+  tabs have no background and a faint pill on hover (patch 0006).
+- Idle push buttons are a plain filled surface like the Plasma style button: no outline and no drop
+  shadow; hover, focus, the default button and checked buttons keep their outline (patch 0007).
+- List and tree selections use the 8 px small radius instead of the 12 px control radius, which made every
+  selected row a full pill (patch 0008).
+- The slider handle is filled with the accent colour and has no drop shadow; the outline is drawn only
+  while the handle is hovered or the slider has focus. The dial handle keeps its button colour fill but
+  follows the same shadow and outline rule (patch 0009).
+- An idle line edit is borderless: the outline falls back to the field colour while the field is not
+  hovered, not focused and not animating; hover, focus and the animation keep their outline (patch 0010).
+- A group box is frameless and its title is bold, one point larger and left aligned, whether or not the
+  group box is flat; a check box in the title keeps the plain font (patch 0011).
+- The table header sits on the list base colour instead of the button colour and the vertical separators
+  between header sections are gone; the bottom outline of a horizontal header stays (patch 0012).
+
 * Fri Oct 23 2026 Project Ro-ASD <contact@roasd.org> - 0.1.1-1
 - Controls use a 12 px corner (buttons, fields, combo boxes, tabs, frames, list
   selection; Breeze 5) and the check box corner stays 4 (patch 0003). The menu
