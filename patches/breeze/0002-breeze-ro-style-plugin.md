@@ -1,8 +1,8 @@
 ## 0002-breeze-ro-style-plugin
 
 - Upstream repository: https://invent.kde.org/plasma/breeze.git
-- Upstream base tag/commit: v6.7.5 (release tarball https://download.kde.org/stable/plasma/6.7.5/breeze-6.7.5.tar.xz), applied after 0001
-- Fedora 44 package version checked: plasma-breeze-6.7.5-1.fc44
+- Upstream base tag/commit: v6.8.2 (release tarball https://download.kde.org/stable/plasma/6.8.2/breeze-6.8.2.tar.xz), applied after 0001
+- Fedora 44 package version checked: plasma-breeze-6.8.2-1.fc44
 - Affected upstream files:
   - kstyle/CMakeLists.txt (the plugin target is `ro6` instead of `breeze6`; installs `ro.themerc`)
   - kstyle/breeze.json (factory key `Ro`)
@@ -13,4 +13,5 @@
 - Override considered: yes. Replacing `breeze6.so` needs a name-preserving rebuild of a core package (critical-desktop risk class in Ro-Repo).
 - Upstreamable: no.
 - Verification: `make ro6` in a Fedora 44 container; `QStyleFactory.keys()` lists `Ro` next to `Breeze`; a Qt test menu with `QT_STYLE_OVERRIDE=Ro` draws the Ro menu frame. Real Dolphin and Plasma shell checks pending.
+- Rebase note: refreshed for Breeze 6.8.2, whose `kstyle/CMakeLists.txt` gained `install(FILES breeze.kcfg ...)` after the `breeze.themerc` install line; only the context of the last CMake hunk changed, the renames are the same. The package builds only the `ro6` target and installs `ro6.so` and `ro.themerc` by hand, so that kcfg install line is not used.
 - Upgrade risk: low (CMake and metadata). KDE code that tests the style name for "breeze" treats Ro as unknown; check on the test machine before making Ro the default style.
