@@ -60,7 +60,7 @@ jobs:
           cd "${WORK}/breeze-${FEDORA}" && git init -q
           OK=true
           for p in "${GITHUB_WORKSPACE}"/patches/breeze/*.patch; do
-            if git apply --check "$p" 2>>"${WORK}/err.txt" && git apply "$p"; then
+            if patch -p1 -s --fuzz=0 --no-backup-if-mismatch -f --dry-run < "$p" >>"${WORK}/err.txt" 2>&1 && patch -p1 -s --fuzz=0 --no-backup-if-mismatch -f < "$p"; then
               echo "applies: $(basename "$p")" | tee -a "${GITHUB_STEP_SUMMARY}"
             else
               echo "DOES NOT APPLY: $(basename "$p")" | tee -a "${GITHUB_STEP_SUMMARY}"
