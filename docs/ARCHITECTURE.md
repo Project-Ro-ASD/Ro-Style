@@ -19,7 +19,7 @@ Ro-Style keeps the few Ro-ASD differences that the Breeze Qt style cannot expres
 
 ## Why a patch
 
-Checked against Breeze 6.7.5: `kstyle/breezemetrics.h` has a fixed `Frame_FrameRadius = 5`; `Helper::renderMenuFrame`, `Helper::menuFrameRegion` and `ShadowHelper` use it for menu and tooltip frames; no `breezerc` key controls it (the key list in the plugin has MenuOpacity, shadow keys, animation keys and flags only). Kvantum was rejected in Ro-Theme-Docs APP-01.
+Checked against Breeze 6.7.5 and 6.8.2 (the style code relevant here is identical in both): `kstyle/breezemetrics.h` has a fixed `Frame_FrameRadius = 5`; `Helper::renderMenuFrame`, `Helper::menuFrameRegion` and `ShadowHelper` use it for menu and tooltip frames; no `breezerc` key controls it (the key list in the plugin has MenuOpacity, shadow keys, animation keys and flags only). Kvantum was rejected in Ro-Theme-Docs APP-01.
 
 ## Downstream model
 

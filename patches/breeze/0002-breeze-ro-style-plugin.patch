@@ -1,5 +1,5 @@
 diff --git a/kstyle/CMakeLists.txt b/kstyle/CMakeLists.txt
-index d5c8989..f91ddd2 100644
+index 773ab80..c552b63 100644
 --- a/kstyle/CMakeLists.txt
 +++ b/kstyle/CMakeLists.txt
 @@ -58,39 +58,39 @@ kconfig_add_kcfg_files(breeze_PART_SRCS ../kdecoration/breezesettings.kcfgc)
@@ -82,9 +82,9 @@ index d5c8989..f91ddd2 100644
 -install(FILES breeze.themerc  DESTINATION  ${KDE_INSTALL_DATADIR}/kstyle/themes)
 +install(TARGETS ro${QT_MAJOR_VERSION}  DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/styles/)
 +install(FILES ro.themerc  DESTINATION  ${KDE_INSTALL_DATADIR}/kstyle/themes)
+ install(FILES breeze.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
  
  ########### subdirectories ###############
- 
 diff --git a/kstyle/breeze.json b/kstyle/breeze.json
 index a3d2b19..4d2ef30 100644
 --- a/kstyle/breeze.json
