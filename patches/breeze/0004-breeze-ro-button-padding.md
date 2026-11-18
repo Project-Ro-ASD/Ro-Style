@@ -1,8 +1,8 @@
 ## 0004-breeze-ro-button-padding
 
 - Upstream repository: https://invent.kde.org/plasma/breeze.git
-- Upstream base tag/commit: v6.8.2 (release tarball https://download.kde.org/stable/plasma/6.8.2/breeze-6.8.2.tar.xz), applied after 0001-0003
-- Fedora 44 package version checked: plasma-breeze-6.8.2-1.fc44
+- Upstream base tag/commit: v6.8.3 (release tarball https://download.kde.org/stable/plasma/6.8.3/breeze-6.8.3.tar.xz), applied after 0001-0003
+- Fedora 44 package version checked: plasma-breeze-6.8.3-1.fc44
 - Affected upstream files:
   - kstyle/breezemetrics.h (`Button_MarginWidth` 6 -> 8)
 - Layer: widget style drawing constants only
