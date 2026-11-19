@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Install tools
-        run: dnf install -y git python3 curl tar xz dnf5-plugins
+        run: dnf install -y git python3 curl tar xz patch dnf5-plugins
 
       - name: Compare versions and try the patches
         id: cmp

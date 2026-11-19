@@ -4,10 +4,10 @@
   "projects": {
     "breeze": {
       "url": "https://invent.kde.org/plasma/breeze.git",
-      "tarball": "https://download.kde.org/stable/plasma/6.8.2/breeze-6.8.2.tar.xz",
-      "base_tag": "v6.8.2",
+      "tarball": "https://download.kde.org/stable/plasma/6.8.3/breeze-6.8.3.tar.xz",
+      "base_tag": "v6.8.3",
       "purpose": "Breeze Qt widget style (kstyle): menu, tooltip and frame drawing",
-      "tarball_sha256": "d6493c5abbcb27b6b1bc42e2e561d64218133ecd2ed56bfc42b1e25d97e216bc"
+      "tarball_sha256": "1d47a61f9f397f212d7a23d7ed7a7289b026757a050610304bb945dc067937e2"
     }
   }
 }

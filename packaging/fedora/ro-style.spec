@@ -1,9 +1,9 @@
 # Ro-Style: the Ro-ASD Qt widget style "Ro", derived from KDE Breeze.
 # Built from the Breeze source archive plus the Ro patches in patches/breeze (see README.md); no Fedora package is replaced.
-%global breeze_version 6.8.2
+%global breeze_version 6.8.3
 
 Name:           ro-style
-Version:        0.1.3
+Version:        0.1.4
 Release:        1%{?dist}
 Summary:        Ro-ASD Qt widget style, derived from KDE Breeze
 # kstyle and libbreezecommon: GPL-2.0-or-later (some files MIT or GPL-2.0-or-later OR MIT; generated Qt files)
@@ -80,6 +80,11 @@ install -Dm0644 kstyle/ro.themerc %{buildroot}%{_datadir}/kstyle/themes/ro.theme
 %{_datadir}/kstyle/themes/ro.themerc
 
 %changelog
+* Wed Nov 18 2026 Project Ro-ASD <contact@roasd.org> - 0.1.4-1
+- Rebased onto Breeze 6.8.3 (Fedora 44 plasma-breeze 6.8.3-1). The kstyle sources are identical to 6.8.2
+  (only the project version and a wallpaper's metadata changed), so every patch applies unchanged and the
+  style behaviour is the same as 0.1.3.
+
 * Tue Nov 03 2026 Project Ro-ASD <contact@roasd.org> - 0.1.3-1
 - Rebased onto Breeze 6.8.2 (Fedora 44 plasma-breeze 6.8.2-1). Patch 0002 is refreshed: the last CMake hunk
   no longer applied because 6.8.2 added an install line for breeze.kcfg; the rename itself is unchanged. The
